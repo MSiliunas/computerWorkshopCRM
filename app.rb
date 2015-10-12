@@ -1,0 +1,5 @@
+require_relative 'order'
+require_relative 'computer'
+require_relative 'client'
+require_relative 'task'
+require_relative 'employee'
