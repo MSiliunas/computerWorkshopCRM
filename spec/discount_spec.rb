@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe 'Discount' do
-  discount = Discount.new(Discount::TYPE_PERCENT, 50)
+  before :all do
+    discount = Discount.new(Discount::TYPE_PERCENT, 50)
+  end
 
   it 'returns type' do
     expect(discount.type).to eq Discount::TYPE_PERCENT
