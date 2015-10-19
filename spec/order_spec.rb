@@ -15,76 +15,63 @@ describe 'Order' do
     )
     @computer = Computer.new('ASDF123', {}, @client)
     @employee = Employee.new('John', 'Doe', '003706123456', 'email@here.com')
+  end
+
+  before :each do
     @order = Order.new(@client, @computer, @employee, @tasks, nil)
-    @discount = Discount.new(Discount::TYPE_VALUE, 3)
-    @discount_percent = Discount.new(Discount::TYPE_PERCENT, 50)
   end
 
-  it 'returns status' do
-    expect(@order.status).to eq Order::STATUS_NEW
+  context 'when status changes' do
+    it do
+      @order.status = Order::STATUS_INPROGRESS
+      expect(@order.status).to eq Order::STATUS_INPROGRESS
+    end
+
+    it 'ignores invalid status' do
+      @order.status = 999
+      expect(@order.status).to eq Order::STATUS_NEW
+    end
   end
 
-  it 'changes status' do
-    @order.status = Order::STATUS_INPROGRESS
-
-    expect(@order.status).to eq Order::STATUS_INPROGRESS
-  end
-
-  it 'ignores if given status is invalid' do
-    @order.status = 999
-
-    expect(@order.status).to eq Order::STATUS_INPROGRESS
-  end
-
-  it 'estimates due date' do
-    estimated_due_date = Date.today
-    estimated_hours = 0.0
-
-    @tasks.each { |x| estimated_hours += x.duration }
-    estimated_due_date += (estimated_hours / 8).round
-
-    expect(@order.estimated_due_date).to eq estimated_due_date
-  end
-
-  it 'assigns customer' do
-    expect(@order.client.firstname).to eq @client.firstname
-    expect(@order.client.lastname).to eq @client.lastname
-  end
-
-  it 'assigns computer' do
-    expect(@order.computer.serial).to eq @computer.serial
-  end
-
-  it 'assigns tasks' do
-    expect(@order.tasks & @tasks).to eq @tasks
-  end
-
-  it 'assigns employee' do
-    expect(@order.employee.firstname).to eq @employee.firstname
-    expect(@order.employee.lastname).to eq @employee.lastname
-  end
-
-  it 'assigns discount' do
-    @order.discount = @discount
-
-    expect(@order.discount.type).to eq @discount.type
-    expect(@order.discount.value).to eq @discount.value
+  context 'estimates order due date' do
+    it 'taken on monday' do
+      @order.instance_variable_set('@created_at', Date.new(2015, 10, 19))
+      expect(@order.estimated_due_date).to eq Date.new(2015, 10, 20)
+    end
+    it 'taken on friday' do
+      @order.instance_variable_set('@created_at', Date.new(2015, 10, 16))
+      expect(@order.estimated_due_date).to eq Date.new(2015, 10, 20)
+    end
+    it 'taken on saturday' do
+      @order.instance_variable_set('@created_at', Date.new(2015, 10, 17))
+      expect(@order.estimated_due_date).to eq Date.new(2015, 10, 20)
+    end
   end
 
   it 'calculates total price of tasks' do
     total_price = 0
     @tasks.each { |x| total_price += x.price }
-
     expect(@order.total_price).to eq total_price
   end
 
-  it 'calculates total price of order with value discount' do
-    expect(@order.grand_total_price).to eq 37.0
-  end
+  context 'when discount is added' do
+    let(:discount)         { Discount.new(Discount::TYPE_VALUE, 3) }
+    let(:discount_percent) { Discount.new(Discount::TYPE_PERCENT, 50) }
 
-  it 'calculates total price of order with percent discount' do
-    @order.discount = @discount_percent
+    it 'assigns discount' do
+      @order.discount = discount
+      expect(@order.discount.type).to eq discount.type
+      expect(@order.discount.value).to eq discount.value
+    end
 
-    expect(@order.grand_total_price).to eq 20.0
+    it 'calculates total price of order with value discount' do
+      @order.discount = discount
+      expect(@order.grand_total_price).to eq 37.0
+    end
+
+    it 'calculates total price of order with percent discount' do
+      @order.discount = discount_percent
+      expect(@order.grand_total_price).to eq 20.0
+    end
   end
 end

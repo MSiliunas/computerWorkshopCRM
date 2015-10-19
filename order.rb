@@ -8,7 +8,7 @@ class Order
   STATUS_COMPLETED = 3
 
   attr_accessor :client, :employee, :computer, :tasks, :discount
-  attr_reader :status
+  attr_reader :status, :created_at
 
   def initialize(client, computer, employee, tasks, discount)
     @status = Order::STATUS_NEW
@@ -17,6 +17,7 @@ class Order
     @employee = employee
     @tasks = tasks
     @discount = discount ? discount : nil
+    @created_at = Date.today
   end
 
   def total_price
@@ -39,12 +40,25 @@ class Order
     grand_total
   end
 
-  def estimated_due_date
-    estimated_due_date = Date.today
-    estimated_hours = 0.0
+  def tasks_total_duration
+    total_hours = 0.0
+    @tasks.each { |x| total_hours += x.duration }
+    total_hours
+  end
 
-    @tasks.each { |x| estimated_hours += x.duration }
-    estimated_due_date + (estimated_hours / 8).round
+  def estimated_due_date
+    return_date = @created_at
+
+    work_days = (tasks_total_duration / 8).round
+
+    work_days.times do
+      return_date += 1
+
+      return_date.saturday? ? return_date += 3 : return_date
+      return_date.sunday? ? return_date += 2 : return_date
+    end
+
+    return_date
   end
 
   def status=(new_status)
