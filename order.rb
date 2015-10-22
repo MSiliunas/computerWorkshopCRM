@@ -1,13 +1,12 @@
 require_relative 'discount'
 
-# Order
+# Client's order
 class Order
   STATUS_NEW = 0
   STATUS_INPROGRESS = 1
   STATUS_FINISHED = 2
   STATUS_COMPLETED = 3
 
-  attr_writer :discount
   attr_reader :status, :created_at, :employee, :computer, :tasks, :discount
 
   def initialize(computer, employee, tasks, discount)
@@ -15,8 +14,12 @@ class Order
     @computer = computer
     @employee = employee
     @tasks = tasks
-    @discount = discount ? discount : nil
+    self.discount = discount
     @created_at = Date.today
+  end
+
+  def discount=(discount)
+    @discount = discount ? discount : nil
   end
 
   def total_price
@@ -26,17 +29,7 @@ class Order
   end
 
   def grand_total_price
-    grand_total = total_price
-    if @discount
-      case @discount.type
-      when Discount::TYPE_PERCENT
-        grand_total *= 1.0 - @discount.value / 100.0
-      when Discount::TYPE_VALUE
-        grand_total -= @discount.value
-      end
-    end
-
-    grand_total
+    @discount.price_with_discount(total_price)
   end
 
   def tasks_total_duration
@@ -45,16 +38,21 @@ class Order
     total_hours
   end
 
+  def tasks_total_duration_workdays
+    (tasks_total_duration / 8).round
+  end
+
+  def add_if_weekend(date)
+    date += date.saturday? ? 3 : 0
+    date.sunday? ? date + 2 : date
+  end
+
   def estimated_due_date
     return_date = @created_at
 
-    work_days = (tasks_total_duration / 8).round
-
-    work_days.times do
+    tasks_total_duration_workdays.times do
       return_date += 1
-
-      return_date.saturday? ? return_date += 3 : return_date
-      return_date.sunday? ? return_date += 2 : return_date
+      return_date = add_if_weekend(return_date)
     end
 
     return_date

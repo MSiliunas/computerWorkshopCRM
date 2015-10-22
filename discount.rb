@@ -10,6 +10,19 @@ class Discount
     self.value = value
   end
 
+  def price_with_discount(price)
+    grand_total = price
+
+    case @type
+    when Discount::TYPE_PERCENT
+      grand_total *= 1.0 - @value / 100.0
+    when Discount::TYPE_VALUE
+      grand_total -= @value
+    end
+
+    grand_total
+  end
+
   def type=(type)
     if type == Discount::TYPE_PERCENT || type == Discount::TYPE_VALUE
       @type = type
