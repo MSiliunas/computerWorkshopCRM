@@ -1,4 +1,5 @@
 require_relative 'discount'
+require_relative 'date_helper'
 
 # Client's order
 class Order
@@ -42,17 +43,12 @@ class Order
     (tasks_total_duration / 8).round
   end
 
-  def add_if_weekend(date)
-    date += date.saturday? ? 3 : 0
-    date.sunday? ? date + 2 : date
-  end
-
   def estimated_due_date
     return_date = @created_at
 
     tasks_total_duration_workdays.times do
       return_date += 1
-      return_date = add_if_weekend(return_date)
+      return_date = DateHelper.add_if_weekend(return_date)
     end
 
     return_date
