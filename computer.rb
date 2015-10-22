@@ -1,10 +1,10 @@
-# Computer
+# Client's computer
 class Computer
-  attr_accessor :client, :specs, :serial
+  attr_reader :specs, :serial, :owner
 
-  def initialize(serial, specs, client)
+  def initialize(serial, specs, owner)
     @specs = specs
-    @client = client
     @serial = serial
+    @owner = owner
   end
 end

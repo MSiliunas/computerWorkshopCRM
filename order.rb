@@ -7,12 +7,11 @@ class Order
   STATUS_FINISHED = 2
   STATUS_COMPLETED = 3
 
-  attr_accessor :client, :employee, :computer, :tasks, :discount
-  attr_reader :status, :created_at
+  attr_writer :discount
+  attr_reader :status, :created_at, :employee, :computer, :tasks, :discount
 
-  def initialize(client, computer, employee, tasks, discount)
+  def initialize(computer, employee, tasks, discount)
     @status = Order::STATUS_NEW
-    @client = client
     @computer = computer
     @employee = employee
     @tasks = tasks
@@ -22,7 +21,7 @@ class Order
 
   def total_price
     total_price = 0.0
-    tasks.each { |x| total_price += x.price }
+    tasks.each { |task| total_price += task.price }
     total_price
   end
 
@@ -42,7 +41,7 @@ class Order
 
   def tasks_total_duration
     total_hours = 0.0
-    @tasks.each { |x| total_hours += x.duration }
+    @tasks.each { |task| total_hours += task.duration }
     total_hours
   end
 

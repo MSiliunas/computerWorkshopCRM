@@ -1,6 +1,6 @@
-# Employee
+# Company's employee
 class Employee
-  attr_accessor :firstname, :lastname, :phone, :email
+  attr_reader :firstname, :lastname, :phone, :email
 
   def initialize(firstname, lastname, phone, email)
     @firstname = firstname

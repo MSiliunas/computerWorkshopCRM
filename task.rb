@@ -1,6 +1,6 @@
-# Task
+# Task described with its duration, price, title and description
 class Task
-  attr_accessor :duration, :price, :title, :description
+  attr_reader :duration, :price, :title, :description
 
   def initialize(title, description, price, duration)
     @title = title

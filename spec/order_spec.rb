@@ -10,15 +10,14 @@ describe 'Order' do
       'Marijus',
       'Siliunas',
       '0037064187787',
-      'marijus.siliunas@mif.stud.vu.lt',
-      ''
+      'marijus.siliunas@mif.stud.vu.lt'
     )
     @computer = Computer.new('ASDF123', {}, @client)
     @employee = Employee.new('John', 'Doe', '003706123456', 'email@here.com')
   end
 
   before :each do
-    @order = Order.new(@client, @computer, @employee, @tasks, nil)
+    @order = Order.new(@computer, @employee, @tasks, nil)
   end
 
   context 'when status changes' do
@@ -38,10 +37,12 @@ describe 'Order' do
       @order.instance_variable_set('@created_at', Date.new(2015, 10, 19))
       expect(@order.estimated_due_date).to eq Date.new(2015, 10, 20)
     end
+
     it 'taken on friday' do
       @order.instance_variable_set('@created_at', Date.new(2015, 10, 16))
       expect(@order.estimated_due_date).to eq Date.new(2015, 10, 20)
     end
+
     it 'taken on saturday' do
       @order.instance_variable_set('@created_at', Date.new(2015, 10, 17))
       expect(@order.estimated_due_date).to eq Date.new(2015, 10, 20)
