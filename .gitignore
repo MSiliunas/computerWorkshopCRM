@@ -34,3 +34,10 @@ build/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+
+# storage files
+/storage/Client.yml
+/storage/Computer.yml
+/storage/Employee.yml
+/storage/Order.yml
+/storage/Task.yml

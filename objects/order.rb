@@ -1,20 +1,26 @@
 require_relative 'discount'
-require_relative 'date_helper'
+require_relative '../helpers/active_record'
+require_relative '../helpers/date_helper'
 
 # Client's order
-class Order
+class Order < ActiveRecord
   STATUS_NEW = 0
   STATUS_INPROGRESS = 1
   STATUS_FINISHED = 2
   STATUS_COMPLETED = 3
 
-  attr_reader :status, :created_at, :employee, :computer, :tasks, :discount
+  attr_reader :status, :created_at, :discount
+  attr_accessor :employee_id, :computer_id
+  relation_one :Computer, 'computer_id', :order
+  relation_one :Employee, 'employee_id', :employee
+  relation_many :Task, 'order', :tasks
 
   def initialize(computer, employee, tasks, discount)
+    super()
     @status = Order::STATUS_NEW
-    @computer = computer
-    @employee = employee
-    @tasks = tasks
+    self.computer_id = computer.id
+    self.employee_id = employee.id
+    tasks.each { |task| task.order_id = id }
     self.discount = discount
     @created_at = Date.today
   end
@@ -30,12 +36,12 @@ class Order
   end
 
   def grand_total_price
-    @discount.price_with_discount(total_price)
+    discount ? discount.price_with_discount(total_price) : total_price
   end
 
   def tasks_total_duration
     total_hours = 0.0
-    @tasks.each { |task| total_hours += task.duration }
+    tasks.each { |task| total_hours += task.duration }
     total_hours
   end
 
@@ -59,5 +65,16 @@ class Order
                             new_status == STATUS_INPROGRESS ||
                             new_status == STATUS_FINISHED ||
                             new_status == STATUS_COMPLETED
+  end
+
+  def to_s
+    'id: ' + id.to_s +
+    "\nstatus: " + status.to_s +
+    "\nprice: " + grand_total_price.to_s +
+    "\ncomputer: " + self.computer_id.to_s +
+    "\nemployee: " + self.employee_id.to_s +
+    "\ndiscount: " + discount.to_s +
+    "\ntasks: " + self.tasks.each { |task| task.to_s }.join(', ') +
+    "\ncreated at: " + created_at.to_s
   end
 end
