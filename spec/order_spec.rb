@@ -1,6 +1,12 @@
 require 'spec_helper'
 require 'date'
 
+RSpec::Matchers.define :be_weekend do
+  match do |actual|
+    (actual.saturday?) || (actual.sunday?)
+  end
+end
+
 describe 'Order' do
   let(:task1) { Task.new('Reinstall OS', '', 25.00, 4) }
   let(:task2) { Task.new('Backup data', '', 15.00, 2) }
@@ -36,6 +42,11 @@ describe 'Order' do
     it 'taken on saturday' do
       order.instance_variable_set('@created_at', Date.new(2015, 10, 17))
       expect(order.estimated_due_date).to eq Date.new(2015, 10, 20)
+    end
+
+    it do
+      order.instance_variable_set('@created_at', Date.new(2015, 10, 16))
+      expect(order.estimated_due_date).not_to be_weekend
     end
   end
 
