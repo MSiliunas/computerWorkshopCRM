@@ -17,4 +17,8 @@ class Task < ActiveRecord
   def to_s
     title
   end
+
+  def save
+
+  end
 end
