@@ -88,6 +88,7 @@ class ActiveRecord
       return nil unless File.exist?(filename)
 
       @instances = YAML.load(File.open(filename))
+      @increment = @instances.max_by { |key, value| key }[0]
     end
 
     def reset
