@@ -7,7 +7,9 @@ require_relative '../objects/task'
 require_relative '../objects/employee'
 require_relative '../objects/client'
 require_relative '../objects/discount'
+require_relative '../objects/user'
 require_relative '../helpers/active_record'
+require_relative '../helpers/auth'
 
 RSpec::Matchers.define :be_weekend do
   match do |actual|
