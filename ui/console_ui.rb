@@ -76,12 +76,12 @@ class ConsoleUI
     puts client.to_s
     print 'OK? [y/N]: '
     case string_input
-      when 'y'
-        Client.dump
-        puts 'Client successfully created!'
-      else
-        client.delete
-        puts 'Client creation aborted.'
+    when 'y'
+      Client.dump
+      puts 'Client successfully created!'
+    else
+      client.delete
+      puts 'Client creation aborted.'
     end
   end
 
@@ -95,12 +95,12 @@ class ConsoleUI
     computer.client_id = client_id
     print 'OK? [y/N]: '
     case string_input
-      when 'y'
-        Computer.dump
-        puts 'Computer successfully added!'
-      else
-        computer.delete
-        puts 'Computer adding canceled.'
+    when 'y'
+      Computer.dump
+      puts 'Computer successfully added!'
+    else
+      computer.delete
+      puts 'Computer adding canceled.'
     end
   end
 

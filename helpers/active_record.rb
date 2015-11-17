@@ -24,7 +24,7 @@ class ActiveRecord
     attr_reader :instances
 
     def new_increment
-      @increment += 1 unless @increment.nil?
+      @increment += 1 if @increment
 
       @increment ||= 1
     end
@@ -88,7 +88,8 @@ class ActiveRecord
       return nil unless File.exist?(filename)
 
       @instances = YAML.load(File.open(filename))
-      @increment = @instances.max_by { |key, value| key }[0]
+      @increment =
+          @instances.max_by { |key, _value| key }[0] if @instances
     end
 
     def reset

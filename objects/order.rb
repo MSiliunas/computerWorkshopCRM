@@ -67,18 +67,18 @@ class Order < ActiveRecord
                             new_status == STATUS_COMPLETED
   end
 
-  def get_task_list_string
-    tasks.each { |task| task.to_s }.join(', ')
+  def task_list_string
+    tasks.each(&:to_s).join(', ')
   end
 
   def to_s
     'id: ' + id.to_s +
-    "\nstatus: " + status.to_s +
-    "\nprice: " + grand_total_price.to_s +
-    "\ncomputer: " + computer_id.to_s +
-    "\nemployee: " + employee_id.to_s +
-    "\ndiscount: " + discount.to_s +
-    "\ntasks: " + get_task_list_string +
-    "\ncreated at: " + created_at.to_s
+      "\nstatus: " + status.to_s +
+      "\nprice: " + grand_total_price.to_s +
+      "\ncomputer: " + computer_id.to_s +
+      "\nemployee: " + employee_id.to_s +
+      "\ndiscount: " + discount.to_s +
+      "\ntasks: " + task_list_string +
+      "\ncreated at: " + created_at.to_s
   end
 end
