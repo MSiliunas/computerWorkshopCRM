@@ -19,6 +19,5 @@ class Task < ActiveRecord
   end
 
   def save
-
   end
 end

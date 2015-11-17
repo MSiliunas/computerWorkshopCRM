@@ -69,12 +69,12 @@ class Order < ActiveRecord
 
   def to_s
     'id: ' + id.to_s +
-    "\nstatus: " + status.to_s +
-    "\nprice: " + grand_total_price.to_s +
-    "\ncomputer: " + self.computer_id.to_s +
-    "\nemployee: " + self.employee_id.to_s +
-    "\ndiscount: " + discount.to_s +
-    "\ntasks: " + self.tasks.each { |task| task.to_s }.join(', ') +
-    "\ncreated at: " + created_at.to_s
+      "\nstatus: " + status.to_s +
+      "\nprice: " + grand_total_price.to_s +
+      "\ncomputer: " + computer_id.to_s +
+      "\nemployee: " + employee_id.to_s +
+      "\ndiscount: " + discount.to_s +
+      "\ntasks: " + tasks.each(&:to_s).join(', ') +
+      "\ncreated at: " + created_at.to_s
   end
 end

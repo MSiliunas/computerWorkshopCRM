@@ -19,9 +19,7 @@ class ConsoleUI
     puts 'Hi!'
     print_main_menu
 
-    until @close_me do
-      command_input
-    end
+    command_input until @close_me
 
     close_app
   end
@@ -46,11 +44,11 @@ class ConsoleUI
   def command_execute(command)
     args = command.split(' ')
     case args[0]
-      when 'employees' then print_all(Employee)
-      when 'orders' then print_all(Order)
-      when 'order' then get_order(args[1].to_i)
-      when 'exit' then @close_me = true
-      else help
+    when 'employees' then print_all(Employee)
+    when 'orders' then print_all(Order)
+    when 'order' then get_order(args[1].to_i)
+    when 'exit' then @close_me = true
+    else help
     end
   end
 

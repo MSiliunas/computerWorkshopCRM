@@ -8,3 +8,15 @@ require_relative '../objects/employee'
 require_relative '../objects/client'
 require_relative '../objects/discount'
 require_relative '../helpers/active_record'
+
+RSpec::Matchers.define :be_weekend do
+  match do |actual|
+    (actual.saturday?) || (actual.sunday?)
+  end
+end
+
+RSpec::Matchers.define :same_computer do |expected|
+  match do |actual|
+    expected.serial == actual.serial
+  end
+end

@@ -1,12 +1,6 @@
 require 'spec_helper'
 require 'date'
 
-RSpec::Matchers.define :be_weekend do
-  match do |actual|
-    (actual.saturday?) || (actual.sunday?)
-  end
-end
-
 describe 'Order' do
   let(:task1) { Task.new('Reinstall OS', '', 25.00, 4) }
   let(:task2) { Task.new('Backup data', '', 15.00, 2) }
@@ -73,5 +67,15 @@ describe 'Order' do
       order.discount = discount_percent
       expect(order.grand_total_price).to eq 20.0
     end
+  end
+
+  it 'has string expression' do
+    expect(order.to_s).to eq "id: 2\nstatus: 0" \
+                             "\nprice: 40.0" \
+                             "\ncomputer: 8" \
+                             "\nemployee: 2" \
+                             "\ndiscount: " \
+                             "\ntasks: Reinstall OS, Backup data" \
+                             "\ncreated at: 2015-11-17"
   end
 end
