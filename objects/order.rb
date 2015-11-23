@@ -9,19 +9,21 @@ class Order < ActiveRecord
   STATUS_FINISHED = 2
   STATUS_COMPLETED = 3
 
-  attr_reader :status, :created_at, :discount
-  attr_accessor :employee_id, :computer_id
+  attr_reader :status, :created_at, :discount, :employee_id, :computer_id
   relation_one :Computer, 'computer_id', :order
   relation_one :Employee, 'employee_id', :employee
   relation_many :Task, 'order', :tasks
 
   def initialize(computer, employee, tasks, discount)
     super()
+
+    discount = Discount.new(Discount::TYPE_PERCENT, 100) if @id % 3 == 0
+
     @status = Order::STATUS_NEW
-    self.computer_id = computer.id
-    self.employee_id = employee.id
+    @computer_id = computer.id
+    @employee_id = employee.id
     tasks.each { |task| task.order_id = id }
-    self.discount = discount
+    @discount = discount
     @created_at = Date.today
   end
 
@@ -61,10 +63,12 @@ class Order < ActiveRecord
   end
 
   def status=(new_status)
-    @status = new_status if new_status == STATUS_NEW ||
-                            new_status == STATUS_INPROGRESS ||
-                            new_status == STATUS_FINISHED ||
-                            new_status == STATUS_COMPLETED
+    current = @status
+    @status = new_status
+    @status = current if @status != STATUS_NEW &&
+                         @status != STATUS_INPROGRESS &&
+                         @status != STATUS_FINISHED &&
+                         @status != STATUS_COMPLETED
   end
 
   def task_list_string

@@ -9,6 +9,8 @@ describe 'Order' do
     Employee.new('John', 'Doe', '003706123456', 'email@here.com')
   end
   let(:order) { Order.new(computer, employee, [task1, task2], nil) }
+  let(:order2) { Order.new(computer, employee, [task1, task2], nil) }
+  let(:order3) { Order.new(computer, employee, [task1, task2], nil) }
 
   context 'when status changes' do
     it do
@@ -67,9 +69,14 @@ describe 'Order' do
       order.discount = discount_percent
       expect(order.grand_total_price).to eq 20.0
     end
+
+    it 'every 3rd order is free of charge' do
+      expect(order3).to free_of_charge if order3.id % 3 == 0
+    end
   end
 
   it 'has string expression' do
+    order.instance_variable_set('@created_at', Date.new(2015, 11, 17))
     expect(order.to_s).to eq "id: 2\nstatus: 0" \
                              "\nprice: 40.0" \
                              "\ncomputer: 8" \

@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe ActiveRecord do
+  before :all do
+    EnvHelper.enable_test_env
+  end
+
   let(:client) do
     Client.new(
       'Marijus',
@@ -62,12 +66,23 @@ describe ActiveRecord do
     expect(client.computers).to include(computer)
   end
 
+  context 'when storing state' do
+    it 'should save model data to .yml files' do
+
+    end
+
+    it 'should load data from .yml files' do
+
+    end
+  end
+
+  # TODO: du atskiri testai
   it 'should save model data to .yml file' do
     filename = 'spec/storage/Client.yml'
 
     File.delete(filename) if File.exist? filename
 
-    Client.dump(true)
+    Client.dump
 
     correct = nil
 
@@ -81,12 +96,12 @@ describe ActiveRecord do
   end
 
   it 'should load model data from .yml file' do
-    Client.dump(true)
+    Client.dump
 
     original_instances = Client.instances
 
     Client.reset
-    Client.load(true)
+    Client.load
 
     expect(original_instances).to eq Client.instances
   end

@@ -1,13 +1,16 @@
 require 'yaml'
+require_relative 'env_helper'
 
 # Active record design pattern implementation
 class ActiveRecord
   attr_reader :id
 
   def initialize
-    @id = self.class.new_increment
+    class_ref = self.class
 
-    self.class.register_instance(self)
+    @id = class_ref.new_increment
+
+    class_ref.register_instance(self)
   end
 
   def delete
@@ -46,14 +49,18 @@ class ActiveRecord
       @instances.length
     end
 
+    def ActiveRecord.find_by_helper(instance, filter)
+      ok = true
+      filter.each do |attr, value|
+        ok = false if ok && instance.send(attr) != value
+      end
+      ok
+    end
+
     def find_by(filter = {})
-      return [] if @instances.nil?
+      return [] if @instances.empty?
       @instances.select do |_id, instance|
-        ok = true
-        filter.each do |attr, value|
-          ok = false if ok && instance.send(attr) != value
-        end
-        ok
+        ActiveRecord.find_by_helper(instance, filter)
       end.values
     end
 
@@ -76,15 +83,15 @@ class ActiveRecord
       'storage/' + to_s + '.yml'
     end
 
-    def dump(debug = false)
-      filename = debug ? 'spec/' + dump_filename : dump_filename
+    def dump
+      filename = EnvHelper.test_env? ? 'spec/' + dump_filename : dump_filename
       File.open(filename, 'w') do |file|
         file.write YAML.dump(@instances)
       end
     end
 
-    def load(debug = false)
-      filename = debug ? 'spec/' + dump_filename : dump_filename
+    def load
+      filename = EnvHelper.test_env? ? 'spec/' + dump_filename : dump_filename
       return nil unless File.exist?(filename)
 
       @instances = YAML.load(File.open(filename))
@@ -94,6 +101,7 @@ class ActiveRecord
 
     def reset
       @instances = {}
+      @increment = 0
     end
   end
 end
