@@ -5,6 +5,10 @@ describe ActiveRecord do
     EnvHelper.enable_test_env
   end
 
+  before :each do
+    Client.reset
+  end
+
   let(:client) do
     Client.new(
       'Marijus',
@@ -67,43 +71,47 @@ describe ActiveRecord do
   end
 
   context 'when storing state' do
-    it 'should save model data to .yml files' do
+    it 'should save model data to .yml file' do
+      filename = 'spec/storage/Client.yml'
 
+      File.delete(filename) if File.exist? filename
+
+      Client.new(
+        'Test',
+        'Storage',
+        '0037061234567',
+        'mail@localhost'
+      )
+
+      Client.dump
+
+      correct = nil
+
+      File.open(filename + '-correct') do |f|
+        correct = f.read
+      end
+
+      File.open(filename) do |f|
+        expect(correct).to eq f.read
+      end
     end
 
-    it 'should load data from .yml files' do
+    it 'should load model data from .yml file' do
+      Client.new(
+        'Test',
+        'Storage',
+        '0037061234567',
+        'mail@localhost'
+      )
+      Client.dump
 
+      original_instances = Client.instances
+
+      Client.reset
+      Client.load
+
+      expect(original_instances).to eq Client.instances
     end
-  end
-
-  # TODO: du atskiri testai
-  it 'should save model data to .yml file' do
-    filename = 'spec/storage/Client.yml'
-
-    File.delete(filename) if File.exist? filename
-
-    Client.dump
-
-    correct = nil
-
-    File.open(filename + '-correct') do |f|
-      correct = f.read
-    end
-
-    File.open(filename) do |f|
-      expect(correct).to eq f.read
-    end
-  end
-
-  it 'should load model data from .yml file' do
-    Client.dump
-
-    original_instances = Client.instances
-
-    Client.reset
-    Client.load
-
-    expect(original_instances).to eq Client.instances
   end
 
   it 'should remove all instances when performing reset' do

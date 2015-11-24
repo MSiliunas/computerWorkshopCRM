@@ -1,49 +1,7 @@
 ---
 1: !ruby/object:Client
   id: 1
-  firstname: Marijus
-  lastname: Siliunas
-  phone: '0037061234567'
-  email: mail@localhost
-2: !ruby/object:Client
-  id: 2
-  firstname: Marijus
-  lastname: Siliunas
-  phone: '0037061234567'
-  email: mail@localhost
-3: !ruby/object:Client
-  id: 3
-  firstname: Anas
-  lastname: Ponas
-  phone: '1234'
-  email: "@here"
-4: !ruby/object:Client
-  id: 4
-  firstname: Marijus
-  lastname: Siliunas
-  phone: '0037061234567'
-  email: mail@localhost
-5: !ruby/object:Client
-  id: 5
-  firstname: Marijus
-  lastname: Siliunas
-  phone: '0037061234567'
-  email: mail@localhost
-7: !ruby/object:Client
-  id: 7
-  firstname: Marijus
-  lastname: Siliunas
-  phone: '0037061234567'
-  email: mail@localhost
-8: !ruby/object:Client
-  id: 8
-  firstname: Marijus
-  lastname: Siliunas
-  phone: '0037061234567'
-  email: mail@localhost
-9: !ruby/object:Client
-  id: 9
-  firstname: Marijus
-  lastname: Siliunas
+  firstname: Test
+  lastname: Storage
   phone: '0037061234567'
   email: mail@localhost
