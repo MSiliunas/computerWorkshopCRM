@@ -1,11 +1,8 @@
 require 'spec_helper'
 
 describe ActiveRecord do
-  before :all do
-    EnvHelper.enable_test_env
-  end
-
   before :each do
+    EnvHelper.enable_test_env
     Client.reset
   end
 
@@ -18,6 +15,17 @@ describe ActiveRecord do
     )
   end
   let(:computer) { Computer.new('ASDF1230', {}) }
+
+  context 'changes filename according to environment' do
+    it do
+      EnvHelper.enable_prod_env
+      expect(Client.dump_filename).to eq 'storage/Client.yml'
+    end
+    it do
+      EnvHelper.enable_test_env
+      expect(Client.dump_filename).to eq 'spec/storage/Client.yml'
+    end
+  end
 
   it 'should have numerical id' do
     @instance = client

@@ -80,18 +80,22 @@ class ActiveRecord
     end
 
     def dump_filename
-      'storage/' + to_s + '.yml'
+      if EnvHelper.test_env?
+        'spec/' + 'storage/' + to_s + '.yml'
+      else
+        'storage/' + to_s + '.yml'
+      end
     end
 
     def dump
-      filename = EnvHelper.test_env? ? 'spec/' + dump_filename : dump_filename
+      filename = dump_filename
       File.open(filename, 'w') do |file|
         file.write YAML.dump(@instances)
       end
     end
 
     def load
-      filename = EnvHelper.test_env? ? 'spec/' + dump_filename : dump_filename
+      filename = dump_filename
       return nil unless File.exist?(filename)
 
       @instances = YAML.load(File.open(filename))

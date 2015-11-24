@@ -83,6 +83,6 @@ describe 'Order' do
                              "\nemployee: 2" \
                              "\ndiscount: " \
                              "\ntasks: Reinstall OS, Backup data" \
-                             "\ncreated at: 2015-11-17"
+                             "\ncreated_at: 2015-11-17\n"
   end
 end

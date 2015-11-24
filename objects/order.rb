@@ -17,6 +17,7 @@ class Order < ActiveRecord
   def initialize(computer, employee, tasks, discount)
     super()
 
+    # Every third order is free
     discount = Discount.new(Discount::TYPE_PERCENT, 100) if @id % 3 == 0
 
     @status = Order::STATUS_NEW
@@ -75,14 +76,24 @@ class Order < ActiveRecord
     tasks.each(&:to_s).join(', ')
   end
 
+  def instance_hash
+    {
+      id: id.to_s,
+      status: status.to_s,
+      price: grand_total_price.to_s,
+      computer: computer_id.to_s,
+      employee: employee_id.to_s,
+      discount: discount.to_s,
+      tasks: task_list_string,
+      created_at: created_at.to_s
+    }
+  end
+
   def to_s
-    'id: ' + id.to_s +
-      "\nstatus: " + status.to_s +
-      "\nprice: " + grand_total_price.to_s +
-      "\ncomputer: " + computer_id.to_s +
-      "\nemployee: " + employee_id.to_s +
-      "\ndiscount: " + discount.to_s +
-      "\ntasks: " + task_list_string +
-      "\ncreated at: " + created_at.to_s
+    str = ''
+    instance_hash.each do |param, value|
+      str += "#{param}: #{value}\n"
+    end
+    str
   end
 end
