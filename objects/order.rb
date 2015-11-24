@@ -23,7 +23,9 @@ class Order < ActiveRecord
     @status = Order::STATUS_NEW
     @computer_id = computer.id
     @employee_id = employee.id
-    tasks.each { |task| task.order_id = id }
+    tasks.each do |task|
+      task.order_id = id
+    end
     @discount = discount
     @created_at = Date.today
   end
@@ -34,7 +36,7 @@ class Order < ActiveRecord
 
   def total_price
     total_price = 0.0
-    tasks.each { |task| total_price += task.price }
+    tasks.each { |task| total_price += task.price.to_f }
     total_price
   end
 

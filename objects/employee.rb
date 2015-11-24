@@ -12,4 +12,8 @@ class Employee < ActiveRecord
     @phone = phone
     @email = email
   end
+
+  def to_s
+    firstname + ' ' + lastname + ' ' + phone + ' ' + email
+  end
 end

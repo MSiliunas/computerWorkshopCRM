@@ -80,7 +80,7 @@ describe 'Order' do
     expect(order.to_s).to eq "id: 2\nstatus: 0" \
                              "\nprice: 40.0" \
                              "\ncomputer: 8" \
-                             "\nemployee: 2" \
+                             "\nemployee: 3" \
                              "\ndiscount: " \
                              "\ntasks: Reinstall OS, Backup data" \
                              "\ncreated_at: 2015-11-17\n"
