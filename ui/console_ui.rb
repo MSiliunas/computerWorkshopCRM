@@ -82,12 +82,12 @@ class ConsoleUI
     puts employee.to_s
     print 'OK? [y/N]: '
     case string_input
-      when 'y'
-        Employee.dump
-        puts 'Employee successfully created!'
-      else
-        employee.delete
-        puts 'Employee creation aborted.'
+    when 'y'
+      Employee.dump
+      puts 'Employee successfully created!'
+    else
+      employee.delete
+      puts 'Employee creation aborted.'
     end
   end
 
@@ -104,12 +104,12 @@ class ConsoleUI
     puts task.to_s
     print 'OK? [y/N]: '
     case string_input
-      when 'y'
-        Task.dump
-        puts 'Task successfully created!'
-      else
-        client.delete
-        puts 'Task creation aborted.'
+    when 'y'
+      Task.dump
+      puts 'Task successfully created!'
+    else
+      client.delete
+      puts 'Task creation aborted.'
     end
   end
 
@@ -117,14 +117,14 @@ class ConsoleUI
     puts 'Choose a computer (id)'
     print_all(Computer)
     computer = integer_input
-    computer = Computer.find_by({id: computer.to_i})
+    computer = Computer.find_by(id: computer.to_i)
     puts 'Choose tasks (id) 1,2...'
     print_all(Task)
     tasks = string_input
     tasks = tasks_hash(tasks)
     print_all(Employee)
     employee = integer_input
-    employee = Employee.find_by({id: employee.to_i})
+    employee = Employee.find_by(id: employee.to_i)
     puts computer.inspect
     puts employee.inspect
     puts tasks.inspect
@@ -132,12 +132,12 @@ class ConsoleUI
     puts order.to_s
     print 'OK? [y/N]: '
     case string_input
-      when 'y'
-        Order.dump
-        puts 'Order successfully created!'
-      else
-        order.delete
-        puts 'Order creation aborted.'
+    when 'y'
+      Order.dump
+      puts 'Order successfully created!'
+    else
+      order.delete
+      puts 'Order creation aborted.'
     end
   end
 
@@ -145,7 +145,7 @@ class ConsoleUI
     tasks = []
     task_ids = string.split(',')
     task_ids.each do |taskId|
-      tasks << Task.find_by({id: taskId.to_i})[0]
+      tasks << Task.find_by(id: taskId.to_i)[0]
     end
     tasks
   end
