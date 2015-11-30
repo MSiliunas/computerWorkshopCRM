@@ -10,22 +10,22 @@ class Order < ActiveRecord
   STATUS_COMPLETED = 3
 
   attr_reader :status, :created_at, :discount, :employee_id, :computer_id
-  relation_one :Computer, 'computer_id', :order
+  relation_one :Computer, 'computer_id', :computer
   relation_one :Employee, 'employee_id', :employee
+  relation_one :Client, 'client_id', :client
   relation_many :Task, 'order', :tasks
 
   def initialize(computer, employee, tasks, discount)
     super()
-
-    # Every third order is free
-    discount = Discount.new(Discount::TYPE_PERCENT, 100) if @id % 3 == 0
-
     @status = Order::STATUS_NEW
     @computer_id = computer.id
+    @client_id = computer.client.id
     @employee_id = employee.id
     tasks.each do |task|
       task.order_id = id
     end
+    # Every third order is free
+    discount = Discount.new(Discount::TYPE_PERCENT, 100) if self.client.orders.size % 3 == 0
     @discount = discount
     @created_at = Date.today
   end

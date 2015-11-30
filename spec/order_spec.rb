@@ -2,15 +2,28 @@ require 'spec_helper'
 require 'date'
 
 describe 'Order' do
+  let(:client) do
+    Client.new(
+        'Marijus',
+        'Siliunas',
+        '0037061234567',
+        'mail@localhost'
+    )
+  end
   let(:task1) { Task.new('Reinstall OS', '', 25.00, 4) }
   let(:task2) { Task.new('Backup data', '', 15.00, 2) }
-  let(:computer) { Computer.new('ASDF123', {}) }
+  let(:computer) { Computer.new('ASDF123', {}, client) }
   let(:employee) do
     Employee.new('John', 'Doe', '003706123456', 'email@here.com')
   end
   let(:order) { Order.new(computer, employee, [task1, task2], nil) }
   let(:order2) { Order.new(computer, employee, [task1, task2], nil) }
   let(:order3) { Order.new(computer, employee, [task1, task2], nil) }
+
+  before :each do
+    Order.reset
+    Task.reset
+  end
 
   context 'when status changes' do
     it do
@@ -71,13 +84,15 @@ describe 'Order' do
     end
 
     it 'every 3rd order is free of charge' do
-      expect(order3).to free_of_charge if order3.id % 3 == 0
+      order
+      order2
+      expect(order3).to free_of_charge
     end
   end
 
   it 'has string expression' do
     order.instance_variable_set('@created_at', Date.new(2015, 11, 17))
-    expect(order.to_s).to eq "id: 2\nstatus: 0" \
+    expect(order.to_s).to eq "id: 1\nstatus: 0" \
                              "\nprice: 40.0" \
                              "\ncomputer: 8" \
                              "\nemployee: 3" \

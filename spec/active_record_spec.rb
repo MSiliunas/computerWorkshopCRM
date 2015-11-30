@@ -14,7 +14,7 @@ describe ActiveRecord do
       'mail@localhost'
     )
   end
-  let(:computer) { Computer.new('ASDF1230', {}) }
+  let(:computer) { Computer.new('ASDF1230', {}, client) }
 
   context 'changes filename according to environment' do
     it do
@@ -37,7 +37,7 @@ describe ActiveRecord do
   end
 
   it 'should have different increment for different classes' do
-    expect { computer }.to_not change(Client, :increment)
+    expect { computer }.to_not change(Order, :increment)
   end
 
   it 'should be able to get the same intance by id' do

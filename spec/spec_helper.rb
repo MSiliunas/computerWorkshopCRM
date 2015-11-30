@@ -21,7 +21,7 @@ end
 # TODO: rimtesni matcheri pvz su nuolaida (tikrinti ar trecias)
 RSpec::Matchers.define :free_of_charge do
   match do |order|
-    order.id % 3 == 0 && order.grand_total_price == 0.0
+    order.client.orders.size % 3 == 0 && order.grand_total_price == 0.0
   end
 end
 
