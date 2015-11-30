@@ -4,10 +4,10 @@ require 'date'
 describe 'Order' do
   let(:client) do
     Client.new(
-        'Marijus',
-        'Siliunas',
-        '0037061234567',
-        'mail@localhost'
+      'Marijus',
+      'Siliunas',
+      '0037061234567',
+      'mail@localhost'
     )
   end
   let(:task1) { Task.new('Reinstall OS', '', 25.00, 4) }

@@ -3,10 +3,10 @@ require 'spec_helper'
 describe 'Computer' do
   let(:client) do
     Client.new(
-        'Marijus',
-        'Siliunas',
-        '0037061234567',
-        'mail@localhost'
+      'Marijus',
+      'Siliunas',
+      '0037061234567',
+      'mail@localhost'
     )
   end
   let(:computer) { Computer.new('ASDF123', {}, client) }

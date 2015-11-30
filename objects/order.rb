@@ -21,11 +21,10 @@ class Order < ActiveRecord
     @computer_id = computer.id
     @client_id = computer.client.id
     @employee_id = employee.id
-    tasks.each do |task|
-      task.order_id = id
-    end
+    tasks.each { |task| task.order_id = id }
     # Every third order is free
-    discount = Discount.new(Discount::TYPE_PERCENT, 100) if self.client.orders.size % 3 == 0
+    discount =
+        Discount.new(Discount::TYPE_PERCENT, 100) if client.orders.size % 3 == 0
     @discount = discount
     @created_at = Date.today
   end
