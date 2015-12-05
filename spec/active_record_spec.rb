@@ -68,13 +68,13 @@ describe ActiveRecord do
 
   it 'should walk through one relation' do
     client
-    computer.client_id = client.id
+    computer
     expect(computer.client).to eq client
   end
 
   it 'should walk through many relation' do
-    computer.client_id = client.id
-
+    client
+    computer
     expect(client.computers).to include(computer)
   end
 
