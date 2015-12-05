@@ -2,23 +2,38 @@ require 'spec_helper'
 require 'date'
 
 describe 'Order' do
-  let(:task1) { Task.new('Reinstall OS', '', 25.00, 4) }
-  let(:task2) { Task.new('Backup data', '', 15.00, 2) }
-  let(:computer) { Computer.new('ASDF123', {}) }
+  let(:client) do
+    Client.new(
+      'Marijus',
+      'Siliunas',
+      '0037061234567',
+      'mail@localhost'
+    )
+  end
+  let(:task1) { Task.new('Reinstall OS', 25.00, 4) }
+  let(:task2) { Task.new('Backup data', 15.00, 2) }
+  let(:computer) { Computer.new('ASDF123', {}, client) }
   let(:employee) do
     Employee.new('John', 'Doe', '003706123456', 'email@here.com')
   end
   let(:order) { Order.new(computer, employee, [task1, task2], nil) }
+  let(:order2) { Order.new(computer, employee, [task1, task2], nil) }
+  let(:order3) { Order.new(computer, employee, [task1, task2], nil) }
+
+  before :each do
+    Order.reset
+    Task.reset
+  end
 
   context 'when status changes' do
     it do
-      order.status = Order::STATUS_INPROGRESS
-      expect(order.status).to eq Order::STATUS_INPROGRESS
+      order.details.status = Order::STATUS_INPROGRESS
+      expect(order.details.status).to eq Order::STATUS_INPROGRESS
     end
 
     it 'ignores invalid status' do
-      order.status = 999
-      expect(order.status).to eq Order::STATUS_NEW
+      order.details.status = 999
+      expect(order.details.status).to eq Order::STATUS_NEW
     end
   end
 
@@ -53,29 +68,37 @@ describe 'Order' do
     let(:discount_percent) { Discount.new(Discount::TYPE_PERCENT, 50) }
 
     it 'assigns discount' do
-      order.discount = discount
-      expect(order.discount.type).to eq discount.type
-      expect(order.discount.value).to eq discount.value
+      order.details.discount = discount
+      expect(order.details.discount.type).to eq discount.type
+      expect(order.details.discount.value).to eq discount.value
     end
 
     it 'calculates total price of order with value discount' do
-      order.discount = discount
+      order.details.discount = discount
       expect(order.grand_total_price).to eq 37.0
     end
 
     it 'calculates total price of order with percent discount' do
-      order.discount = discount_percent
+      order.details.discount = discount_percent
       expect(order.grand_total_price).to eq 20.0
+    end
+
+    it 'every 3rd order is free of charge' do
+      order
+      order2
+      expect(order3).to free_of_charge
     end
   end
 
   it 'has string expression' do
-    expect(order.to_s).to eq "id: 2\nstatus: 0" \
+    order.details.instance_variable_set('@created_at', Date.new(2015, 11, 17))
+    expect(order.to_s).to eq 'id: 1' \
                              "\nprice: 40.0" \
                              "\ncomputer: 8" \
-                             "\nemployee: 2" \
-                             "\ndiscount: " \
+                             "\nemployee: 3" \
                              "\ntasks: Reinstall OS, Backup data" \
-                             "\ncreated at: 2015-11-17"
+                             "\nstatus: 0" \
+                             "\ndiscount: " \
+                             "\ncreated_at: 2015-11-17\n"
   end
 end

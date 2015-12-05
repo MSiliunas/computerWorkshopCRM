@@ -1,8 +1,16 @@
 require 'spec_helper'
 
 describe 'Computer' do
-  let(:computer) { Computer.new('ASDF123', {}) }
-  let(:computer1) { Computer.new('ASDF123', {}) }
+  let(:client) do
+    Client.new(
+      'Marijus',
+      'Siliunas',
+      '0037061234567',
+      'mail@localhost'
+    )
+  end
+  let(:computer) { Computer.new('ASDF123', {}, client) }
+  let(:computer1) { Computer.new('ASDF123', {}, client) }
 
   it 'has string expression' do
     expect(computer.to_s).to eq 'ASDF123'

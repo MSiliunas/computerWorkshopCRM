@@ -1,4 +1,5 @@
 require_relative 'discount'
+require_relative 'order_details'
 require_relative '../helpers/active_record'
 require_relative '../helpers/date_helper'
 
@@ -9,39 +10,49 @@ class Order < ActiveRecord
   STATUS_FINISHED = 2
   STATUS_COMPLETED = 3
 
-  attr_reader :status, :created_at, :discount
-  attr_accessor :employee_id, :computer_id
-  relation_one :Computer, 'computer_id', :order
+  attr_reader :employee_id, :computer_id, :details_id
+  relation_one :Computer, 'computer_id', :computer
   relation_one :Employee, 'employee_id', :employee
-  relation_many :Task, 'order', :tasks
+  relation_one :Client, 'client_id', :client
+  relation_one :OrderDetails, 'details_id', :details
 
   def initialize(computer, employee, tasks, discount)
     super()
-    @status = Order::STATUS_NEW
-    self.computer_id = computer.id
-    self.employee_id = employee.id
-    tasks.each { |task| task.order_id = id }
-    self.discount = discount
-    @created_at = Date.today
+    details = OrderDetails.new(tasks)
+    @details_id = details.id
+    @computer_id = computer.id
+    @client_id = computer.client.id
+    @employee_id = employee.id
+    process_discount(discount)
   end
 
-  def discount=(discount)
-    @discount = discount ? discount : nil
+  def process_discount(discount)
+    # Every third order is free
+    details.discount = if client.orders.size % 3 == 0
+                         Discount.new(Discount::TYPE_PERCENT, 100)
+                       else
+                         discount
+                       end
   end
 
   def total_price
     total_price = 0.0
-    tasks.each { |task| total_price += task.price }
+    details.tasks.each { |task| total_price += task.price.to_f }
     total_price
   end
 
   def grand_total_price
-    discount ? discount.price_with_discount(total_price) : total_price
+    discount = details.discount
+    if discount
+      discount.price_with_discount(total_price)
+    else
+      total_price
+    end
   end
 
   def tasks_total_duration
     total_hours = 0.0
-    tasks.each { |task| total_hours += task.duration }
+    details.tasks.each { |task| total_hours += task.duration }
     total_hours
   end
 
@@ -60,25 +71,25 @@ class Order < ActiveRecord
     return_date
   end
 
-  def status=(new_status)
-    @status = new_status if new_status == STATUS_NEW ||
-                            new_status == STATUS_INPROGRESS ||
-                            new_status == STATUS_FINISHED ||
-                            new_status == STATUS_COMPLETED
+  def task_list_string
+    details.tasks.each(&:to_s).join(', ')
   end
 
-  def task_list_string
-    tasks.each(&:to_s).join(', ')
+  def instance_hash
+    {
+      id: id.to_s,
+      price: grand_total_price.to_s,
+      computer: computer_id.to_s,
+      employee: employee_id.to_s,
+      tasks: task_list_string
+    }.merge(details.to_s)
   end
 
   def to_s
-    'id: ' + id.to_s +
-      "\nstatus: " + status.to_s +
-      "\nprice: " + grand_total_price.to_s +
-      "\ncomputer: " + computer_id.to_s +
-      "\nemployee: " + employee_id.to_s +
-      "\ndiscount: " + discount.to_s +
-      "\ntasks: " + task_list_string +
-      "\ncreated at: " + created_at.to_s
+    str = ''
+    instance_hash.each do |param, value|
+      str += "#{param}: #{value}\n"
+    end
+    str
   end
 end

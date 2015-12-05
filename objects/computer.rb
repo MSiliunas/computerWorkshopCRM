@@ -3,13 +3,12 @@ require_relative 'client'
 
 # Client's computer
 class Computer < ActiveRecord
-  attr_reader :specs, :serial
-  attr_accessor :client_id
+  attr_reader :specs, :serial, :client_id
   relation_one :Client, 'client_id', :client
-  relation_many :Order, 'order', :orders
 
-  def initialize(serial, specs)
+  def initialize(serial, specs, client)
     super()
+    @client_id = client.id
     @specs = specs
     @serial = serial
   end

@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe ActiveRecord do
+  before :each do
+    EnvHelper.enable_test_env
+    Client.reset
+  end
+
   let(:client) do
     Client.new(
       'Marijus',
@@ -9,7 +14,18 @@ describe ActiveRecord do
       'mail@localhost'
     )
   end
-  let(:computer) { Computer.new('ASDF1230', {}) }
+  let(:computer) { Computer.new('ASDF1230', {}, client) }
+
+  context 'changes filename according to environment' do
+    it do
+      EnvHelper.enable_prod_env
+      expect(Client.dump_filename).to eq 'storage/Client.yml'
+    end
+    it do
+      EnvHelper.enable_test_env
+      expect(Client.dump_filename).to eq 'spec/storage/Client.yml'
+    end
+  end
 
   it 'should have numerical id' do
     @instance = client
@@ -21,7 +37,7 @@ describe ActiveRecord do
   end
 
   it 'should have different increment for different classes' do
-    expect { computer }.to_not change(Client, :increment)
+    expect { computer }.to_not change(Order, :increment)
   end
 
   it 'should be able to get the same intance by id' do
@@ -52,43 +68,58 @@ describe ActiveRecord do
 
   it 'should walk through one relation' do
     client
-    computer.client_id = client.id
+    computer
     expect(computer.client).to eq client
   end
 
   it 'should walk through many relation' do
-    computer.client_id = client.id
-
+    client
+    computer
     expect(client.computers).to include(computer)
   end
 
-  it 'should save model data to .yml file' do
-    filename = 'spec/storage/Client.yml'
+  context 'when storing state' do
+    it 'should save model data to .yml file' do
+      filename = 'spec/storage/Client.yml'
 
-    File.delete(filename) if File.exist? filename
+      File.delete(filename) if File.exist? filename
 
-    Client.dump(true)
+      Client.new(
+        'Test',
+        'Storage',
+        '0037061234567',
+        'mail@localhost'
+      )
 
-    correct = nil
+      Client.dump
 
-    File.open(filename + '-correct') do |f|
-      correct = f.read
+      correct = nil
+
+      File.open(filename + '-correct') do |f|
+        correct = f.read
+      end
+
+      File.open(filename) do |f|
+        expect(correct).to eq f.read
+      end
     end
 
-    File.open(filename) do |f|
-      expect(correct).to eq f.read
+    it 'should load model data from .yml file' do
+      Client.new(
+        'Test',
+        'Storage',
+        '0037061234567',
+        'mail@localhost'
+      )
+      Client.dump
+
+      original_instances = Client.instances
+
+      Client.reset
+      Client.load
+
+      expect(original_instances).to eq Client.instances
     end
-  end
-
-  it 'should load model data from .yml file' do
-    Client.dump(true)
-
-    original_instances = Client.instances
-
-    Client.reset
-    Client.load(true)
-
-    expect(original_instances).to eq Client.instances
   end
 
   it 'should remove all instances when performing reset' do

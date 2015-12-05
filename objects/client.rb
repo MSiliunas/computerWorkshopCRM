@@ -4,6 +4,7 @@ require_relative '../helpers/active_record'
 class Client < ActiveRecord
   attr_reader :firstname, :phone, :lastname, :email
   relation_many :Computer, 'client', :computers
+  relation_many :Order, 'client', :orders
 
   def initialize(firstname, lastname, phone, email)
     super()
