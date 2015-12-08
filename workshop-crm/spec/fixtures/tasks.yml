@@ -1,0 +1,9 @@
+one:
+  title: 'Reinstall OS'
+  price: 25.0
+  duration: 4
+
+two:
+  title: 'Backup data'
+  price: 15.0
+  duration: 2

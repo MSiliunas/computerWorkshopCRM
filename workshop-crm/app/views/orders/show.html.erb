@@ -1,0 +1,20 @@
+<p>
+  <strong>Title:</strong>
+  <%= @order.title %>
+</p>
+
+<p>
+  <strong>Text:</strong>
+  <%= @order.text %>
+</p>
+
+<h2>Add a comment:</h2>
+<%= form_for([@order, @order.order_details.build]) do |f| %>
+    <p>
+      <%= f.label :status %><br>
+      <%= f.text_field :status %>
+    </p>
+    <p>
+      <%= f.submit %>
+    </p>
+<% end %>

@@ -1,0 +1,5 @@
+john:
+  firstname: 'John'
+  lastname: 'Doe'
+  phone: '003706123456'
+  email: 'email@here.com'

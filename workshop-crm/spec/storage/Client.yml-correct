@@ -1,0 +1,7 @@
+---
+1: !ruby/object:Client
+  id: 1
+  firstname: Test
+  lastname: Storage
+  phone: '0037061234567'
+  email: mail@localhost
