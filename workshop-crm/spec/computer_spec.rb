@@ -10,7 +10,9 @@ describe 'Computer' do
 
   it 'detects if computer already in system' do
     computer = computers(:one)
-    computer1 = computers(:one)
+    computer1 = Computer.new
+    computer1.stubs(:serial).returns('ASDF123')
+
     expect(computer).to same_computer(computer1)
   end
 end

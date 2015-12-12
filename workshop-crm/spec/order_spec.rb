@@ -72,14 +72,13 @@ describe 'Order' do
     end
 
     it 'every 3rd order is free of charge' do
-      order
-      order2
+      order3.client.orders.stubs(:size).returns(6)
       expect(order3).to free_of_charge
     end
   end
 
   it 'has string expression' do
-    order.order_detail.created_at = DateTime.new(2015, 11, 17, 14)
+    order.order_detail.stubs(:created_at).returns(DateTime.new(2015, 11, 17, 14))
     expect(order.to_s).to eq 'id: 1'\
                              "\nprice: 40.0"\
                              "\ncomputer: ASDF123"\
@@ -87,6 +86,6 @@ describe 'Order' do
                              "\ntasks: Reinstall OS, Backup data" \
                              "\nstatus: 1"\
                              "\ndiscount: "\
-                             "\ncreated_at: 2015-11-17 14:00:00 UTC\n"
+                             "\ncreated_at: 2015-11-17T14:00:00+00:00\n"
   end
 end

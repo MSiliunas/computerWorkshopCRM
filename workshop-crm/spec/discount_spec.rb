@@ -20,7 +20,7 @@ describe 'Discount' do
   end
 
   it 'changes discount value' do
-    discount_value.value = 1
+    discount_value.stubs(:value).returns(1)
     expect(discount_value.price_with_discount(10)). to eq 9
   end
 
