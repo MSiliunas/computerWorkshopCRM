@@ -8,15 +8,20 @@ describe 'Discount' do
   context 'when data not valid' do
     it do
       expect do
-        Discount.new('asdf', -10)
+        Discount.new({discount_type: 'asdf', value: -10})
       end.to raise_error('Invalid discount type')
     end
 
     it do
       expect do
-        Discount.new(Discount::TYPE_VALUE, -1)
+        Discount.new({discount_type: Discount::TYPE_VALUE, value: -1})
       end.to raise_error('Invalid discount value')
     end
+  end
+
+  it 'changes discount value' do
+    discount_value.value = 1
+    expect(discount_value.price_with_discount(10)). to eq 9
   end
 
   context 'when discount type is percent' do

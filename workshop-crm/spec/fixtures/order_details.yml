@@ -1,0 +1,20 @@
+first:
+  id: 1
+  status: 1
+  order_id: 1
+  employee_id: 1
+  computer_id: 1
+
+second:
+  id: 2
+  status: 0
+  order_id: 2
+  employee_id: 1
+  computer_id: 1
+
+third:
+  id: 3
+  status: 1
+  order_id: 3
+  employee_id: 1
+  computer_id: 1

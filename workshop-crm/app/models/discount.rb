@@ -2,10 +2,7 @@ class Discount < ActiveRecord::Base
   TYPE_PERCENT = 'percent'
   TYPE_VALUE = 'value'
 
-  def initialize(discount_type, value)
-    self.discount_type = discount_type
-    self.value = value
-  end
+  has_many :orders
 
   def price_with_discount(price)
     grand_total = price
@@ -29,9 +26,9 @@ class Discount < ActiveRecord::Base
   end
 
   def value=(new_value)
-    if  (@discount_type == Discount::TYPE_PERCENT && new_value.between?(0, 100)) ||
-        (@discount_type == Discount::TYPE_VALUE && new_value > 0)
-      @value = new_value
+    if  (discount_type == Discount::TYPE_PERCENT && new_value.between?(0, 100)) ||
+        (discount_type == Discount::TYPE_VALUE && new_value > 0)
+      update_column :value, new_value
     else
       fail Exception, 'Invalid discount value'
     end

@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 describe Employee do
-  let(:employee) { Employee.new('Ponas', 'Ponaitis', '1', 'e@e.lt') }
+  fixtures :employees
+  let(:employee) { employees(:john) }
 
   it 'has string expression' do
-    expect(employee.to_s).to eq 'Ponas Ponaitis 1 e@e.lt'
+    expect(employee.to_s).to eq 'John Doe 003706123456 email@here.com'
   end
 end

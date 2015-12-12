@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151207232658) do
+ActiveRecord::Schema.define(version: 20151208164040) do
 
   create_table "clients", force: :cascade do |t|
     t.string   "firstname"
@@ -39,6 +39,14 @@ ActiveRecord::Schema.define(version: 20151207232658) do
     t.datetime "updated_at",    null: false
   end
 
+  create_table "discounts_order_details", force: :cascade do |t|
+    t.integer "discount_id"
+    t.integer "order_detail_id"
+  end
+
+  add_index "discounts_order_details", ["discount_id"], name: "index_discounts_order_details_on_discount_id"
+  add_index "discounts_order_details", ["order_detail_id"], name: "index_discounts_order_details_on_order_detail_id"
+
   create_table "discounts_to_order_details", force: :cascade do |t|
     t.integer  "order_detail_id"
     t.integer  "discount_id"
@@ -59,14 +67,16 @@ ActiveRecord::Schema.define(version: 20151207232658) do
   end
 
   create_table "order_details", force: :cascade do |t|
-    t.integer  "status"
+    t.integer  "status",      default: 0, null: false
     t.integer  "order_id"
     t.integer  "discount_id"
     t.integer  "employee_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "computer_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
+  add_index "order_details", ["computer_id"], name: "index_order_details_on_computer_id"
   add_index "order_details", ["discount_id"], name: "index_order_details_on_discount_id"
   add_index "order_details", ["employee_id"], name: "index_order_details_on_employee_id"
   add_index "order_details", ["order_id"], name: "index_order_details_on_order_id"
@@ -93,10 +103,20 @@ ActiveRecord::Schema.define(version: 20151207232658) do
 
   create_table "tasks", force: :cascade do |t|
     t.string   "title"
-    t.decimal  "price"
+    t.float    "price"
     t.integer  "duration"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "tasks_to_order_details", force: :cascade do |t|
+    t.integer  "order_detail_id"
+    t.integer  "task_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "tasks_to_order_details", ["order_detail_id"], name: "index_tasks_to_order_details_on_order_detail_id"
+  add_index "tasks_to_order_details", ["task_id"], name: "index_tasks_to_order_details_on_task_id"
 
 end

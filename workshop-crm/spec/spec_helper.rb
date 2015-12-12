@@ -17,6 +17,9 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+require 'simplecov'
+SimpleCov.start
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
@@ -88,4 +91,22 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
+end
+
+RSpec::Matchers.define :be_weekend do
+  match do |actual|
+    (actual.saturday?) || (actual.sunday?)
+  end
+end
+
+RSpec::Matchers.define :free_of_charge do
+  match do |order|
+    order.client.orders.size % 3 == 0 && order.grand_total_price == 0.0
+  end
+end
+
+RSpec::Matchers.define :same_computer do |expected|
+  match do |actual|
+    expected.serial == actual.serial
+  end
 end

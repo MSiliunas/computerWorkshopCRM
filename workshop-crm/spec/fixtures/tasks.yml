@@ -1,9 +1,11 @@
 one:
+  id: 1
   title: 'Reinstall OS'
   price: 25.0
   duration: 4
 
 two:
+  id: 2
   title: 'Backup data'
   price: 15.0
   duration: 2

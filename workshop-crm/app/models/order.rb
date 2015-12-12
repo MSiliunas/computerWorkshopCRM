@@ -1,26 +1,15 @@
 # Client's order
 class Order < ActiveRecord::Base
-  belongs_to :client, inverse_of: :orders
+  belongs_to :client
   has_one :order_detail, inverse_of: :order
-  has_one :computer
-  has_one :employee
-
-  def initialize(computer, employee, tasks, discount, client)
-    @order_detail = OrderDetail.new(tasks)
-    @computer = computer
-    @client = computer
-    @employee = employee
-    @client = client
-    process_discount(discount)
-  end
 
   def process_discount(discount)
     # Every third order is free
-    order_detail.discount = if client.orders.size % 3 == 0
-                         Discount.new(Discount::TYPE_PERCENT, 100)
-                       else
-                         discount
-                       end
+    # @order_detail.discount = if @client.orders.size % 3 == 0
+    #                      Discount.new(Discount::TYPE_PERCENT, 100)
+    #                    else
+    #                      discount
+    #                    end
   end
 
   def total_price
@@ -30,9 +19,8 @@ class Order < ActiveRecord::Base
   end
 
   def grand_total_price
-    discount = order_detail.discount
-    if discount
-      discount.price_with_discount(total_price)
+    if order_detail.discount.presence
+      order_detail.discount.price_with_discount(total_price)
     else
       total_price
     end
@@ -49,10 +37,10 @@ class Order < ActiveRecord::Base
   end
 
   def estimated_due_date
-    return_date = created_at
+    return_date = order_detail.created_at
 
     tasks_total_duration_workdays.times do
-      return_date += 1
+      return_date += 1.days
       return_date = DateHelper.add_if_weekend(return_date)
     end
 
@@ -67,8 +55,8 @@ class Order < ActiveRecord::Base
     {
       id: id.to_s,
       price: grand_total_price.to_s,
-      computer: computer.to_s,
-      employee: employee.to_s,
+      computer: order_detail.computer.to_s,
+      employee: order_detail.employee.to_s,
       tasks: task_list_string
     }.merge(order_detail.to_s)
   end

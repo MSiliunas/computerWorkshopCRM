@@ -1,7 +1,7 @@
 value:
-  discount_type: 'value'
+  discount_type: value
   value: 3
 
 percent:
-  discount_type: 'percent'
+  discount_type: percent
   value: 50

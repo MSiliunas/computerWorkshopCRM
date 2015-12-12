@@ -1,0 +1,14 @@
+first:
+  id: 1
+  client_id: 1
+  order_detail_id: 1
+
+second:
+  id: 2
+  client_id: 1
+  order_detail_id: 2
+
+third:
+  id: 3
+  client_id: 1
+  order_detail_id: 3

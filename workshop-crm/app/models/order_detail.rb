@@ -6,13 +6,12 @@ class OrderDetail < ActiveRecord::Base
   STATUS_COMPLETED = 3
 
   belongs_to :order, inverse_of: :order_detail
-  has_many :tasks, through: :order_details_to_tasks
-  has_one :discount, through: :discounts_to_order_details
-  attr_reader :status
-
-  def initialize(tasks)
-    @status = OrderDetail::STATUS_NEW
-  end
+  has_many :tasks_to_order_details
+  has_many :tasks, through: :tasks_to_order_details
+  belongs_to :discount
+  attr_readonly :status
+  belongs_to :employee
+  belongs_to :computer
 
   def status=(new_status)
     current = @status

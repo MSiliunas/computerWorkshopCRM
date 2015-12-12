@@ -1,9 +1,6 @@
 class Task < ActiveRecord::Base
-  def initialize(title, price, duration)
-    self.title = title
-    self.price = price
-    self.duration = duration
-  end
+
+  has_many :order_details, through: :tasks_to_order_details
 
   def to_s
     title
