@@ -3,15 +3,6 @@ class Order < ActiveRecord::Base
   belongs_to :client
   has_one :order_detail, inverse_of: :order
 
-  def process_discount(discount)
-    # Every third order is free
-    # @order_detail.discount = if @client.orders.size % 3 == 0
-    #                      Discount.new(Discount::TYPE_PERCENT, 100)
-    #                    else
-    #                      discount
-    #                    end
-  end
-
   def total_price
     total_price = 0.0
     order_detail.tasks.each { |task| total_price += task.price.to_f }
@@ -19,8 +10,9 @@ class Order < ActiveRecord::Base
   end
 
   def grand_total_price
-    if order_detail.discount.presence
-      order_detail.discount.price_with_discount(total_price)
+    discount = order_detail.discount
+    if discount.presence
+      discount.price_with_discount(total_price)
     else
       total_price
     end

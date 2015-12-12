@@ -1,3 +1,4 @@
+# Client's computer
 class Computer < ActiveRecord::Base
   belongs_to :client, inverse_of: :computers
   has_many :order_details

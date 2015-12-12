@@ -1,3 +1,4 @@
+# Order discount
 class Discount < ActiveRecord::Base
   TYPE_PERCENT = 'percent'
   TYPE_VALUE = 'value'
@@ -8,9 +9,9 @@ class Discount < ActiveRecord::Base
     grand_total = price
 
     case discount_type
-    when Discount::TYPE_PERCENT
+    when TYPE_PERCENT
       grand_total *= 1.0 - value / 100.0
-    when Discount::TYPE_VALUE
+    when TYPE_VALUE
       grand_total -= value
     end
 
@@ -18,7 +19,7 @@ class Discount < ActiveRecord::Base
   end
 
   def discount_type=(type)
-    if type == Discount::TYPE_PERCENT || type == Discount::TYPE_VALUE
+    if type == TYPE_PERCENT || type == TYPE_VALUE
       @discount_type = type
     else
       fail Exception, 'Invalid discount type'
@@ -26,8 +27,8 @@ class Discount < ActiveRecord::Base
   end
 
   def value=(new_value)
-    if  (discount_type == Discount::TYPE_PERCENT && new_value.between?(0, 100)) ||
-        (discount_type == Discount::TYPE_VALUE && new_value > 0)
+    if (discount_type == TYPE_PERCENT && new_value.between?(0, 100)) ||
+       (discount_type == TYPE_VALUE && new_value > 0)
       update_column :value, new_value
     else
       fail Exception, 'Invalid discount value'

@@ -56,7 +56,8 @@ describe 'Order' do
 
     it 'assigns discount' do
       order.order_detail.discount = discount
-      expect(order.order_detail.discount.discount_type).to eq discount.discount_type
+      type = discount.discount_type
+      expect(order.order_detail.discount.discount_type).to eq type
       expect(order.order_detail.discount.value).to eq discount.value
     end
 
@@ -79,13 +80,13 @@ describe 'Order' do
 
   it 'has string expression' do
     order.order_detail.created_at = DateTime.new(2015, 11, 17, 14)
-    expect(order.to_s).to eq 'id: 1' \
-                             "\nprice: 40.0" \
-                             "\ncomputer: ASDF123" \
-                             "\nemployee: John Doe 003706123456 email@here.com" \
+    expect(order.to_s).to eq 'id: 1'\
+                             "\nprice: 40.0"\
+                             "\ncomputer: ASDF123"\
+                             "\nemployee: John Doe 003706123456 email@here.com"\
                              "\ntasks: Reinstall OS, Backup data" \
-                             "\nstatus: 1" \
-                             "\ndiscount: " \
+                             "\nstatus: 1"\
+                             "\ndiscount: "\
                              "\ncreated_at: 2015-11-17 14:00:00 UTC\n"
   end
 end

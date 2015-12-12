@@ -8,13 +8,13 @@ describe 'Discount' do
   context 'when data not valid' do
     it do
       expect do
-        Discount.new({discount_type: 'asdf', value: -10})
+        Discount.new(discount_type: 'asdf', value: -10)
       end.to raise_error('Invalid discount type')
     end
 
     it do
       expect do
-        Discount.new({discount_type: Discount::TYPE_VALUE, value: -1})
+        Discount.new(discount_type: Discount::TYPE_VALUE, value: -1)
       end.to raise_error('Invalid discount value')
     end
   end

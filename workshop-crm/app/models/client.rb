@@ -1,3 +1,4 @@
+# Customer entity
 class Client < ActiveRecord::Base
   has_many :orders, inverse_of: :client
   has_many :computers, inverse_of: :client
