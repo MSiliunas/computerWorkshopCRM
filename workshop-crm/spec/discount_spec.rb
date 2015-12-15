@@ -24,6 +24,12 @@ describe 'Discount' do
     expect(discount_value.price_with_discount(10)). to eq 9
   end
 
+  it 'sets new value' do
+    old = discount_value.value
+    discount_value.value = 22
+    expect(discount_value.value).not_to eq old
+  end
+
   context 'when discount type is percent' do
     it do
       expect(discount_percent.price_with_discount(10)). to eq 5

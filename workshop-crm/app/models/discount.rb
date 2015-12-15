@@ -20,7 +20,7 @@ class Discount < ActiveRecord::Base
 
   def discount_type=(type)
     if type == TYPE_PERCENT || type == TYPE_VALUE
-      @discount_type = type
+      super(type)
     else
       fail Exception, 'Invalid discount type'
     end
@@ -29,7 +29,7 @@ class Discount < ActiveRecord::Base
   def value=(new_value)
     if (discount_type == TYPE_PERCENT && new_value.between?(0, 100)) ||
        (discount_type == TYPE_VALUE && new_value > 0)
-      update_column :value, new_value
+      super(new_value)
     else
       fail Exception, 'Invalid discount value'
     end
