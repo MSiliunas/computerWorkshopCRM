@@ -72,7 +72,8 @@ describe 'Order' do
     end
 
     it 'every 3rd order is free of charge' do
-      order3.client.orders.stubs(:size).returns(6)
+      order
+      order2
       expect(order3).to free_of_charge
     end
   end
