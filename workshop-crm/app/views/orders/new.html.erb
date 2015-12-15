@@ -1,0 +1,13 @@
+<%= form_for([@order, @order.order_detail.build]) do |f| %>
+    <p>
+      <%= f.label :serial %><br>
+      <%= f.text_field :serial %>
+    </p>
+    <p>
+      <%= f.label :specs %><br>
+      <%= f.text_field :specs %>
+    </p>
+    <p>
+      <%= f.submit %>
+    </p>
+<% end %>

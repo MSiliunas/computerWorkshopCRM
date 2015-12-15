@@ -1,0 +1,21 @@
+<%= link_to 'Add new', new_employee_path %>
+
+<h3>Listing employees</h3>
+<table>
+  <tr>
+    <th>Firstname</th>
+    <th>Lastname</th>
+    <th>Phone</th>
+    <th>Email</th>
+  </tr>
+
+  <% @employees.each do |employee| %>
+      <tr>
+        <td><%= employee.firstname %></td>
+        <td><%= employee.lastname %></td>
+        <td><%= employee.phone %></td>
+        <td><%= employee.email %></td>
+        <td><%= link_to 'Show', employee_path(employee) %></td>
+      </tr>
+  <% end %>
+</table>

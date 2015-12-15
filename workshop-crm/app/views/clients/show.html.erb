@@ -1,0 +1,42 @@
+<p>
+  First name: <strong><%= @client.firstname %></strong>
+</p>
+<p>
+  Last name: <strong><%= @client.lastname %></strong>
+</p>
+<p>
+  Phone: <strong><%= @client.phone %></strong>
+</p>
+<p>
+  Email: <strong><%= @client.email %></strong>
+</p>
+
+<h2>Computers</h2>
+<% @client.computers.each do |computer| %>
+    <p>
+      <strong>Serial:</strong>
+      <%= computer.serial %>
+    </p>
+
+    <p>
+      <strong>Specs:</strong>
+      <%= computer.specs %>
+    </p>
+<% end %>
+
+<h2>Add a computer:</h2>
+<%= form_for([@client, @client.computers.build]) do |f| %>
+    <p>
+      <%= f.label :serial %><br>
+      <%= f.text_field :serial %>
+    </p>
+    <p>
+      <%= f.label :specs %><br>
+      <%= f.text_field :specs %>
+    </p>
+    <p>
+      <%= f.submit %>
+    </p>
+<% end %>
+
+<%= link_to 'Back', clients_path %>
