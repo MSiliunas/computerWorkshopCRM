@@ -26,17 +26,17 @@ describe 'Order' do
 
   context 'estimates order due date' do
     it 'taken on monday' do
-      order.order_detail.created_at = Date.new(2015, 10, 19)
+      order.order_detail.stubs(:created_at).returns(Date.new(2015, 10, 19))
       expect(order.estimated_due_date).to eq Date.new(2015, 10, 20)
     end
 
     it 'taken on friday' do
-      order.order_detail.created_at = Date.new(2015, 10, 16)
+      order.order_detail.stubs(:created_at).returns(Date.new(2015, 10, 16))
       expect(order.estimated_due_date).to eq Date.new(2015, 10, 20)
     end
 
     it 'taken on saturday' do
-      order.order_detail.created_at = Date.new(2015, 10, 17)
+      order.order_detail.stubs(:created_at).returns(Date.new(2015, 10, 17))
       expect(order.estimated_due_date).to eq Date.new(2015, 10, 20)
     end
 
