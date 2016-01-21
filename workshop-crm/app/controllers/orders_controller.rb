@@ -5,10 +5,14 @@ class OrdersController < ApplicationController
 
   def new
     @order = Order.new
+    @order.build_order_detail
   end
 
   def create
     @order = Order.new(order_params)
+    @order.build_order_detail
+
+    logger.debug @order.order_detail.inspect
 
     if @order.save
       redirect_to @order
@@ -23,6 +27,6 @@ class OrdersController < ApplicationController
 
   private
     def order_params
-      params.require(:employee).permit()
+      params.require(:order).permit(order_detail_attributes: [:id, :employee, :computer, :tasks, :discount])
     end
 end

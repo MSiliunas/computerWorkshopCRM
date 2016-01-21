@@ -3,6 +3,7 @@ class Order < ActiveRecord::Base
   belongs_to :client
   has_one :order_detail, inverse_of: :order
   accepts_nested_attributes_for :order_detail
+  validates_associated :order_detail
 
   def total_price
     total_price = 0.0

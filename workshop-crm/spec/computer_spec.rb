@@ -7,7 +7,8 @@ describe 'Computer' do
     computer = computers(:one)
     expect(computer.to_s).to eq 'ASDF123'
   end
-
+  # TODO: mock su expect
+  # TODO: daugiau testu
   it 'detects if computer already in system' do
     computer = computers(:one)
     computer1 = Computer.new

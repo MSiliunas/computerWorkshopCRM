@@ -14,7 +14,7 @@ describe 'Discount' do
 
     it do
       expect do
-        Discount.new(discount_type: Discount::TYPE_VALUE, value: -1)
+        Discount.new(discount_type: Discount::DISCOUNT_TYPES[:value], value: -1)
       end.to raise_error('Invalid discount value')
     end
   end

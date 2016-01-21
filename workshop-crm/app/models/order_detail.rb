@@ -12,6 +12,9 @@ class OrderDetail < ActiveRecord::Base
   attr_readonly :status
   belongs_to :employee
   belongs_to :computer
+  validates_presence_of :order
+  validates_presence_of :employee
+  validates_presence_of :computer
 
   def status=(new_status)
     current = @status

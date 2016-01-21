@@ -63,12 +63,14 @@ describe 'Order' do
 
     it 'calculates total price of order with value discount' do
       order.order_detail.discount = discount
-      expect(order.grand_total_price).to eq 37.0
+      order.order_detail.discount.expects(:price_with_discount).with(40).returns(37)
+      assert_equal order.grand_total_price, 37.0
     end
 
     it 'calculates total price of order with percent discount' do
       order.order_detail.discount = discount_percent
-      expect(order.grand_total_price).to eq 20.0
+      order.order_detail.discount.expects(:price_with_discount).with(40).returns(20)
+      assert_equal order.grand_total_price, 20.0
     end
 
     it 'every 3rd order is free of charge' do

@@ -1,12 +1,38 @@
-<%= form_for([@order, @order.order_detail.build]) do |f| %>
-    <p>
-      <%= f.label :serial %><br>
-      <%= f.text_field :serial %>
-    </p>
-    <p>
-      <%= f.label :specs %><br>
-      <%= f.text_field :specs %>
-    </p>
+<%= form_for @order, url: orders_path do |f| %>
+
+    <% if @order.errors.any? %>
+        <div id="error_explanation">
+          <h3>
+            <%= pluralize(@order.errors.count, "error") %> prohibited
+            this order from being saved:
+          </h3>
+          <ul>
+            <% @order.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <%= f.fields_for @order.order_detail do |od| %>
+        <p>
+          <%= od.label :computer %><br/>
+          <%= od.select(:computer, Computer.all.collect {|p| [p.to_s, p.id]}) %>
+        </p>
+        <p>
+          <%= od.label :tasks %><br/>
+          <%= od.select(:tasks, Task.all.collect {|p| [ p.title, p.id ] }, {}, { :multiple => true }) %>
+        </p>
+        <p>
+          <%= od.label :employee %><br/>
+          <%= od.select(:employee, Employee.all.collect {|p| [ p.to_s, p.id ] }) %>
+        </p>
+        <p>
+          <%= od.label :discount %><br/>
+          <%= od.select(:discount, Discount.all.collect {|p| [ p.to_s, p.id ] }) %>
+        </p>
+    <% end %>
+
     <p>
       <%= f.submit %>
     </p>
